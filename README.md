@@ -29,6 +29,50 @@ Each user's device has a MAC adress which they are responsible for inputting in 
 
 Futhermore, sending texts normally costs money due to SIM but through STMP, you can email a user with their carrier information and their carrier converts the email to a text messages but you do have to format it, here is the code I used to do it. 
 
+```cpp
+// Register Device MAC in Firebase ---
+ String userSmsDomain;
+  for (JsonPair kv : users) {
+    JsonObject profile = kv.value()["profile"];
+    if (profile["macAddress"] && profile["macAddress"] == mac) {
+      matchedUID = kv.key().c_str();
+      userSmsDomain = profile["smsDomain"].as<String>();
+      break;
+    }
+  }
+  if (matchedUID.isEmpty()) {
+    Serial.println("No user found for MAC");
+    return;
+  }
+
+  // Get both numbers directly (DB already has no +1)
+  String userPhone = users[matchedUID]["profile"]["phoneNumber"].as<String>();
+  String contactPhone;
+  JsonObject contacts = users[matchedUID]["contacts"];
+  for (JsonPair ckv : contacts) {
+    contactPhone = ckv.value()["phone"].as<String>();
+    break; // Only take first contact
+  }
+  if (userPhone.isEmpty() || contactPhone.isEmpty()) {
+    Serial.println("Missing phone number(s)");
+    return;
+  }
+
+  // Use the user's SMS domain for both numbers
+  String emails[2] = { userPhone + "@" + userSmsDomain, contactPhone + "@" + userSmsDomain };
+  for (String addr : emails) {
+    EMailSender::EMailMessage msg;
+    msg.subject = "Movement Detected!";
+    msg.message = "Alert: SOMEBODY IS MESSING WITH UR STUFF BRO";
+    EMailSender::Response resp = emailSend.send(addr, msg);
+    Serial.println("Sent to " + addr + ": " + resp.status + " " + resp.desc);
+  }
+}
+
+```
+
+This part of the firmware is responsible for figuring out which user a device belongs to and sending that user (and one other contact) an SMS alert whenever movement is detected. First, the ESP32 loops through every user in the Firebase database and looks for the one whose stored macAddress matches the MAC of the device that just triggered an event. Once it finds the correct user, it pulls that user’s SMS domain (for example, vtext.com or tmomail.net) so it knows how to format email-to-SMS messages. If no matching user is found, the function stops. After identifying the owner, the code grabs two phone numbers from Firebase: the user’s own number and the first emergency contact listed under their account. If either number is missing, the alert can’t be sent and the function exits. Otherwise, the ESP32 converts both phone numbers into SMS email addresses by appending the SMS domain (e.g., 1234567890@vtext.com). It then builds a simple alert message and sends it to both numbers using the onboard email sender. When finished, it prints the result for each message so debugging is easy. This creates a lightweight notification system where each device can instantly alert its owner and their contact whenever the system detects movement.
+
 =======
 # Welcome to your Expo app 👋
 
