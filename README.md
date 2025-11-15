@@ -12,10 +12,12 @@ I programmed this circuit to send me a text utilizing IFTT (If this then that) e
 However, utilizing IFTT wasn't sustainable as I couldn't easily access the state the device was in wether if it was moving or not, a history of the times the device was shifted, the time it was shifted, or more importantly do user authentication so I could distribute the device to my friends. As a result, I began searching for Arduino SDK's which enable me to connect to cloud infrastrucute to post data in real time to fuffill my expansive demands. Through plenty of iteration, Firebase was the easiest service to choose from and all of the hardware-based code is detailed in the UnderWrapsOfficialTriggerProtocol.ino program where you can see the ESP and Firebase connect through here:
 
 
+`
 if (Firebase.signUp(&config, &auth, "", "")) {
     Serial.println("Firebase anonymous signup OK");
     signupOK = true;
 }
+`
 
 =======
 # Welcome to your Expo app 👋
