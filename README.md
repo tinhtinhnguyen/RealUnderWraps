@@ -77,9 +77,11 @@ Anyways, through further development and finishing the code I was able to focus 
 <img width="651" height="778" alt="leaninsodaaafantaaa" src="https://github.com/user-attachments/assets/16604a5d-0f6d-4dfb-aaf4-6fd2f8d6d9f4" />
 
 
-I am still working on the PCB and the 3D printed enclosure which is why I am writing this grant and for further documentation purposes here is the video I made for the Congressional App Challenge Which includes the full demo.
+I am still working on the PCB (/electronics) and the 3D printed enclosure which is why I am writing this grant and for further documentation purposes here is the video I made for the Congressional App Challenge Which includes the full demo and some other demos as well:
 
+https://www.youtube.com/shorts/beeHeGn8aZI
 
+https://youtube.com/shorts/vgONke_c4HE
 
 =======
 # Welcome to your Expo app 👋
