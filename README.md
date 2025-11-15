@@ -13,7 +13,8 @@ However, utilizing IFTT wasn't sustainable as I couldn't easily access the state
 ```if (Firebase.signUp(&config, &auth, "", "")) {
     Serial.println("Firebase anonymous signup OK");
     signupOK = true;
-} ```
+}
+```
 
 =======
 # Welcome to your Expo app 👋
