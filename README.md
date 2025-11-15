@@ -73,6 +73,12 @@ Futhermore, sending texts normally costs money due to SIM but through STMP, you 
 
 This part of the firmware is responsible for figuring out which user a device belongs to and sending that user (and one other contact) an SMS alert whenever movement is detected. First, the ESP32 loops through every user in the Firebase database and looks for the one whose stored macAddress matches the MAC of the device that just triggered an event. Once it finds the correct user, it pulls that user’s SMS domain (for example, vtext.com or tmomail.net) so it knows how to format email-to-SMS messages. If no matching user is found, the function stops. After identifying the owner, the code grabs two phone numbers from Firebase: the user’s own number and the first emergency contact listed under their account. If either number is missing, the alert can’t be sent and the function exits. Otherwise, the ESP32 converts both phone numbers into SMS email addresses by appending the SMS domain (e.g., 1234567890@vtext.com). It then builds a simple alert message and sends it to both numbers using the onboard email sender. When finished, it prints the result for each message so debugging is easy. This creates a lightweight notification system where each device can instantly alert its owner and their contact whenever the system detects movement.
 
+Anyways, through further development and finishing the code I was able to focus on further minituraizing the devcie so it could be more presentable and I was able to get to here: ![IMG_8908](https://github.com/user-attachments/assets/d2485526-2c6f-41ec-a305-c054afc0f91e)
+
+I am still working on the PCB and the 3D printed enclosure which is why I am writing this grant and for further documentation purposes here is some of the screenshots of the app and the video I made for the Congressional App Challenge 
+
+
+
 =======
 # Welcome to your Expo app 👋
 
