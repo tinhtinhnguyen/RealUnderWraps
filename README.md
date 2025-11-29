@@ -1,15 +1,15 @@
 
 # UnderWraps
 
-In April of 2025, I began to take interest in the concept of Internet of Devices, the ability to create a web or network of devices which collect data and interact with eachother via internet, as I stumbled through a MicroCenter I discovered a device named the ESP32 which is embedded with WiFi connectivity and I also recieved a vibration sensor and created a circuit that looks like this:
+In April of 2025, I began to take interest in the concept of Internet of Devices, the ability to create a web or network of devices which collect data and interact with eachother via internet connectivity. As I strolled through my local MicroCenter, I stumbled upon a device -- the ESP32 -- which is embedded with WiFi connectivity. I also found a vibration sensor and created a circuit that looks like this:
 
 <img width="537" height="275" alt="lockmein" src="https://github.com/user-attachments/assets/0634526d-3dc6-46df-9b40-664fcc47b7cc" />
 
-I programmed this circuit to send me a text utilizing IFTT (If this then that) every time a vibration was detected but I realized that the vibration sensor was very limited as it wasn't able to pick up on movement and I also had to shake the breadboard violently to elicit a triggering event. As a result, I made a transition from the vibration sensor to an MPU6050 which enabled me to track percice 3-axis movement resulting in a circuit which looks like this
+I programmed this circuit to send me a text utilizing IFTT (If this, then that) for every time a vibration was detected. But soon, I realized that the vibration sensor was very limited, as it wasn't able to detect movement. Additionally, I had to violently shake the breadboard to elicit a triggering event. In response, I made a transition from the vibration sensor to an MPU6050, which enabled me to track percice 3-axis movement, resulting in a circuit which looks like this:
 
 <img width="315" height="406" alt="circuit" src="https://github.com/user-attachments/assets/2b088dde-9334-4988-89f8-ee768a030933" />
 
-However, utilizing IFTT wasn't sustainable as I couldn't easily access the state the device was in wether if it was moving or not, a history of the times the device was shifted, the time it was shifted, or more importantly do user authentication so I could distribute the device to my friends. As a result, I began searching for Arduino SDK's which enable me to connect to cloud infrastrucute to post data in real time to fuffill my expansive demands. Through plenty of iteration, Firebase was the easiest service to choose from and all of the hardware-based code is detailed in the UnderWrapsOfficialTriggerProtocol.ino program where you can see the ESP and Firebase connect through here:
+However, utilizing IFTT wasn't sustainable as I couldn't easily access the state of the device;  whether it was moving or not, I wasn't able to see a history of the times the device was shifted, the time it was shifted, or most importantly enable user authentication so I could distribute the device to my friends. Due to these issues, I began searching for Arduino SDK's which allow me to connect to cloud infrastrucute to post data in real time to fulfill my expansive demands. Through relentless iteration, Firebase emerged as the easiest service to choose from. All of the hardware-based code is detailed in the UnderWrapsOfficialTriggerProtocol.ino program where you can see the ESP and Firebase connect through here:
 
 
 ```cpp
@@ -22,12 +22,14 @@ However, utilizing IFTT wasn't sustainable as I couldn't easily access the state
   }
   Serial.println("Setup complete.");
 ```
-Here the device anonomoysly signs into firebase and posts it's mac adress onto the database and looks like this 
+Here, you can see the device anonymously signs into Firebase and posts its MAC address onto the database and it looks a little something like this: 
+
 <img width="456" height="242" alt="then" src="https://github.com/user-attachments/assets/af0513b9-12e7-42d4-a721-c11d6c5207e6" />
 
-Each user's device has a MAC adress which they are responsible for inputting in the app so their device be assigned to them and the device can send messages to them. Texts are sent using gmail STMP protocol which can also be viewed in the UnderWrapsOfficialTriggerProtocol.ino but the user authentication process is showcased in RealUnderWraps/blob/main/app/(tabs)/index.tsx where I put the users phone number through an API which then returns their carrier which is used to send texts.
+Each user's device has a MAC adress which they are responsible for inputting in the app so that their device be assigned to them. Once this is completed, the device can send messages directly to their phone number. Texts are sent using GMAIL STMP protocol, which can also be viewed in the UnderWrapsOfficialTriggerProtocol.ino
+Additionally, the user authentication process is showcased in RealUnderWraps/blob/main/app/(tabs)/index.tsx where I put the user's phone number through an API, which then returns their carrier, which is then used to send texts.
 
-Futhermore, sending texts normally costs money due to SIM but through STMP, you can email a user with their carrier information and their carrier converts the email to a text messages but you do have to format it, here is the code I used to do it. 
+Furthermore, sending texts typically costs money due to SIM, but through STMP, you can email a user with their carrier information and their carrier converts the email to a text messages The only obstacle is that the user has to format it. Here is the code I used to do it:
 
 ```cpp
 // Register Device MAC in Firebase ---
@@ -71,13 +73,14 @@ Futhermore, sending texts normally costs money due to SIM but through STMP, you 
 
 ```
 
-This part of the firmware is responsible for figuring out which user a device belongs to and sending that user (and one other contact) an SMS alert whenever movement is detected. First, the ESP32 loops through every user in the Firebase database and looks for the one whose stored macAddress matches the MAC of the device that just triggered an event. Once it finds the correct user, it pulls that user’s SMS domain (for example, vtext.com or tmomail.net) so it knows how to format email-to-SMS messages. If no matching user is found, the function stops. After identifying the owner, the code grabs two phone numbers from Firebase: the user’s own number and the first emergency contact listed under their account. If either number is missing, the alert can’t be sent and the function exits. Otherwise, the ESP32 converts both phone numbers into SMS email addresses by appending the SMS domain (e.g., 1234567890@vtext.com). It then builds a simple alert message and sends it to both numbers using the onboard email sender. When finished, it prints the result for each message so debugging is easy. This creates a lightweight notification system where each device can instantly alert its owner and their contact whenever the system detects movement.
+This part of the firmware is responsible for figuring out which user a device belongs to and sending that user (and one emergency contact) an SMS alert whenever movement is detected. First, the ESP32 loops through every user in the Firebase database and looks for the one whose stored MAC address matches the MAC of the device that triggered the event. Once the correct user is found, it pulls that user’s SMS domain (for example, vtext.com or tmomail.net) so it knows how to format email-to-SMS messages. IF no matching user is found, the function stops. After identifying the owner, the code grabs two phone numbers from Firebase: the user’s own number and the first emergency contact listed under their account. If either number is missing, the alert can’t be sent and the function exits. Otherwise, the ESP32 converts both phone numbers into SMS email addresses by appending the SMS domain (e.g., 1234567890@vtext.com). It then builds a simple alert message and sends it to both numbers using the onboard email sender. When finished, it prints the result for each message so debugging is easy. This creates a lightweight notification system where each device can instantly alert its owner and their contact whenever the system detects movement (Seems like a long process, but it functions quicker than you would think).
 
-Anyways, through further development and finishing the code I was able to focus on further minituraizing the devcie so it could be more presentable and I was able to get to here:
+Anyways, through further development and finishing the code, I was able to focus on further miniaturizing the devcie so it could be more presentable and I was able to get to here:
+
 <img width="651" height="778" alt="leaninsodaaafantaaa" src="https://github.com/user-attachments/assets/16604a5d-0f6d-4dfb-aaf4-6fd2f8d6d9f4" />
 
 
-I am still working on the PCB (/electronics) and the 3D printed enclosure which is why I am writing this grant and for further documentation purposes here is the video I made for the Congressional App Challenge Which includes the full demo and some other demos as well:
+I am still working on the PCB (Printed Circuit Board) and the 3D printed enclosure, which is why I am writing this grant. For further documentation purposes, below is the link to a video I made for the Congressional App Challenge, which includes the full demo and some other demos as well:
 
 https://www.youtube.com/shorts/beeHeGn8aZI
 
@@ -102,7 +105,7 @@ This is an [Expo](https://expo.dev) project created with [`create-expo-app`](htt
    npx expo start
    ```
 
-In the output, you'll find options to open the app in a
+In the output, you'll find options to open the app
 
 - [development build](https://docs.expo.dev/develop/development-builds/introduction/)
 - [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
