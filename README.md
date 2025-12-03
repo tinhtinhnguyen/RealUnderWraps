@@ -9,7 +9,7 @@ I programmed this circuit to send me a text utilizing IFTT (If this then that) e
 
 <img width="315" height="406" alt="circuit" src="https://github.com/user-attachments/assets/2b088dde-9334-4988-89f8-ee768a030933" />
 
-However, utilizing IFTT wasn't sustainable as I couldn't easily access the state the device was in wether if it was moving or not, a history of the times the device was shifted, the time it was shifted, or more importantly do user authentication so I could distribute the device to my friends. As a result, I began searching for Arduino SDK's which enable me to connect to cloud infrastrucute to post data in real time to fuffill my expansive demands. Through plenty of iteration, Firebase was the easiest service to choose from and all of the hardware-based code is detailed in the UnderWrapsOfficialTriggerProtocol.ino program where you can see the ESP and Firebase connect through here:
+However, utilizing IFTT wasn't sustainable as I couldn't easily access the state the device was in wether if it was moving or not, a history of the times the device was shifted, the time it was shifted, or more importantly do user authentication so I could distribute the device to my friends. As a result, I began searching for Arduino SDK's which enable me to connect to cloud infrastructure to post data in real time to fulfill my expansive demands. Through plenty of iteration, Firebase was the easiest service to choose from and all of the hardware-based code is detailed in the UnderWrapsOfficialTriggerProtocol.ino program where you can see the ESP and Firebase connect through here:
 
 
 ```cpp
